@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset name="My Rule"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+Rule avoid cross referencing between classes
+Rule set which defines MyRule
+    </description>
+
+    <rule name="MyRule"
+          language="java"
+          class="net.sourceforge.pmd.examples.lombok.rules.MyRule"
+          message="Avoid cross referencing between classes of @lombok.Data: ''{0}''.">
+        <description>
+Don't make a cross referencing between POJO classes with @lombok.Data
+this cause an java.lang.StackOverFlowError when trying to access toString() causing infinite recursion.
+        </description>
+        <priority>3</priority>
+        <example>
+<![CDATA[
+import lombok.Data;
+import java.util.List;
+@Data
+public class User {
+    private List<Contact> contactList; //bad contactList->user->this (to infinity and beyond)
+}
+@Data
+public class Contact {
+    private User user; // bad reference
+}
+]]>
+        </example>
+    </rule>
+</ruleset>

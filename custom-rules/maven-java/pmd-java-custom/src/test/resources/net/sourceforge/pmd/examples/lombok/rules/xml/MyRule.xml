@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data
+    xmlns="http://pmd.sourceforge.net/rule-tests"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/rule-tests http://pmd.sourceforge.net/rule-tests_1_0_0.xsd">
+    <test-code>
+        <description>Positive case - lombok.Data cross referencing</description>
+        <expected-problems>1</expected-problems>
+        <expected-messages>
+            <message>Avoid cross referencing between classes of @lombok.Data: '->User->Contact'.</message>
+        </expected-messages>
+        <code><![CDATA[
+import lombok.Data;
+import java.util.List;
+@Data
+public class Contact {
+    private String description;
+    private User user;
+}
+
+@Data
+public class User {
+    private List<Contact> listContactsTODOprecisaSerTratado;
+    private Contact contact;
+}
+     ]]></code>
+    </test-code>
+    <test-code>
+        <description>Negative case - no @lombok.Data annotation</description>
+        <expected-problems>0</expected-problems>
+        <code><![CDATA[
+import lombok.Data;
+import java.util.List;
+@Data
+public class User {
+            private List<Contact> contactList;
+            private Feature feature;
+}
+
+public class Contact {
+    private User user;
+}
+@Data
+public class Feature {
+    private String description;
+}
+
+     ]]></code>
+    </test-code>
+</test-data>
